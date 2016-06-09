@@ -1,9 +1,9 @@
 const LOAD = 'redux-example/file/LOAD';
 const LOAD_SUCCESS = 'redux-example/file/LOAD_SUCCESS';
 const LOAD_FAIL = 'redux-example/file/LOAD_FAIL';
-const SAVE = 'redux-example/file/SAVE';
-const SAVE_SUCCESS = 'redux-example/file/SAVE_SUCCESS';
-const SAVE_FAIL = 'redux-example/file/SAVE_FAIL';
+const UPLOAD = 'redux-example/file/UPLOAD';
+const UPLOAD_SUCCESS = 'redux-example/file/UPLOAD_SUCCESS';
+const UPLOAD_FAIL = 'redux-example/file/UPLOAD_FAIL';
 
 const initialState = {
   loaded: false,
@@ -41,7 +41,7 @@ export default function reducer(state = initialState, action = {}) {
         dir: [],
         error: action.error
       };
-    case SAVE:
+    case UPLOAD:
       return {
         ...state,
         files: [
@@ -49,7 +49,7 @@ export default function reducer(state = initialState, action = {}) {
           ...action.files
         ],
       };
-    case SAVE_SUCCESS:
+    case UPLOAD_SUCCESS:
       const filesPending = state.files.filter((file) => {
         return !existId(action.files, file.id);
       });
@@ -57,7 +57,7 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         files: filesPending
       };
-    case SAVE_FAIL:
+    case UPLOAD_FAIL:
       return {
         ...state,
         error: action.error
@@ -78,7 +78,7 @@ export function load() {
   };
 }
 
-export function save(files) {
+export function upload(files) {
   const formData = new FormData();
   const arrayFiles = [];
 
@@ -90,7 +90,7 @@ export function save(files) {
   }
 
   return {
-    types: [SAVE, SAVE_SUCCESS, SAVE_FAIL],
+    types: [UPLOAD, UPLOAD_SUCCESS, UPLOAD_FAIL],
     files: arrayFiles,
     promise: (client) => client.post('file/upload', {
       data: formData

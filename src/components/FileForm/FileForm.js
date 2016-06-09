@@ -16,12 +16,12 @@ class FileForm extends Component {
   static propTypes = {
     fields: PropTypes.object.isRequired,
     handleSubmit: PropTypes.func.isRequired,
-    save: PropTypes.func.isRequired,
+    upload: PropTypes.func.isRequired,
     load: PropTypes.func.isRequired
   };
 
   render() {
-    const { fields: { files }, handleSubmit, save, load } = this.props;
+    const { fields: { files }, handleSubmit, upload, load } = this.props;
     return (
       <form onSubmit={handleSubmit}>
         <div className="fileinput fileinput-new input-group" data-provides="fileinput">
@@ -31,7 +31,7 @@ class FileForm extends Component {
             <input type="file" multiple {...files} value={null} onChange={event => {
               console.log('event', event.target.files);
               if (!event.target.files.length) return;
-              save(event.target.files)
+              upload(event.target.files)
                 .then(
                   result => {
                     console.log('finish uploading', result);
