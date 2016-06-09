@@ -13,7 +13,6 @@ const initialState = {
 
 function existId( arr, id ) {
   for (const value of arr) {
-    console.log('value', value);
     if (value.id === id) return true;
   }
   return false;
@@ -54,7 +53,6 @@ export default function reducer(state = initialState, action = {}) {
       const filesPending = state.files.filter((file) => {
         return !existId(action.files, file.id);
       });
-      console.log('filesPending', filesPending, 'state.files', state.files, 'action.files', action.files);
       return {
         ...state,
         files: filesPending

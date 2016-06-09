@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {connect} from 'react-redux';
-import Panel from 'react-bootstrap/lib/Panel';
+import {Panel, ListGroup, ListGroupItem } from 'react-bootstrap/lib';
 
 @connect(
   state => ({
@@ -18,11 +18,13 @@ class UploadPanel extends Component {
     const styles = require('./UploadPanel.scss');
     return (
       <Panel collapsible defaultExpanded header="Uploading files..." bsStyle="primary" className={styles.uploadPanel} style={{display: files.length ? 'block' : 'none'}}>
-        {
-          files.map((file) => {
-            return <p key={file.id}><i className="fa fa-cog fa-spin"/>{file.name}</p>;
-          })
-        }
+        <ListGroup fill className={styles.listGroup}>
+          {
+            files.map((file) => {
+              return <ListGroupItem key={file.id} className={styles.listGroupItem}><i className="fa fa-cog fa-spin"/> {file.name}</ListGroupItem>;
+            })
+          }
+        </ListGroup>
       </Panel>
     );
   }

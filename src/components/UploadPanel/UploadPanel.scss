@@ -1,5 +1,15 @@
 .uploadPanel {
   position: absolute;
   bottom: 0;
-  right: 0;
+  right: 20px;
+  width: 350px;
+  .listGroup{
+    max-height: 250px;
+    overflow-y: auto;
+    .listGroupItem{
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
 }
