@@ -15,6 +15,7 @@ module.exports = Object.assign({
   apiHost: process.env.APIHOST || 'localhost',
   apiPort: process.env.APIPORT,
   app: {
+    org: 'AudioVerse',
     title: 'Media Uploader Manager',
     description: '',
     head: {

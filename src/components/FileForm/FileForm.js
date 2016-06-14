@@ -16,17 +16,16 @@ class FileForm extends Component {
   static propTypes = {
     fields: PropTypes.object.isRequired,
     handleSubmit: PropTypes.func.isRequired,
-    upload: PropTypes.func.isRequired,
-    load: PropTypes.func.isRequired
+    upload: PropTypes.func.isRequired
   };
 
   render() {
-    const { fields: { files }, handleSubmit, upload, load } = this.props;
+    const { fields: { files }, handleSubmit, upload } = this.props;
     return (
       <form onSubmit={handleSubmit}>
         <div className="fileinput fileinput-new input-group" data-provides="fileinput">
-          <span className="btn btn-default btn-file">
-            <span className="fileinput-new">Select file</span>
+          <span className="btn-file">
+            <span className="fileinput-new">Upload</span>
             <span className="fileinput-exists">Change</span>
             <input type="file" multiple {...files} value={null} onChange={event => {
               console.log('event', event.target.files);
@@ -38,15 +37,6 @@ class FileForm extends Component {
                     if (result && typeof result.error === 'object') {
                       return Promise.reject(result.error);
                     }
-
-                    return load()
-                      .then(
-                        result => { // eslint-disable-line no-shadow,no-unused-vars
-                          console.log('finish load');
-                        },
-                        error => {
-                          console.log('error to load files', error);
-                        });
                   },
                   error => {
                     console.log('error to save files', error);

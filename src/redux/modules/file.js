@@ -55,12 +55,20 @@ export default function reducer(state = initialState, action = {}) {
       });
       return {
         ...state,
-        files: filesPending
+        files: filesPending,
+        dir: [
+          ...state.dir,
+          ...action.result.files
+        ]
       };
     case UPLOAD_FAIL:
+      const filesPendingAfterUploadFail = state.files.filter((file) => {
+        return !existId(action.files, file.id);
+      });
       return {
         ...state,
-        error: action.error
+        error: action.error,
+        files: filesPendingAfterUploadFail,
       };
     default:
       return state;
