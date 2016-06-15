@@ -33,13 +33,13 @@ class FileForm extends Component {
               upload(event.target.files)
                 .then(
                   result => {
-                    console.log('finish uploading', result);
+                    console.log(result);
                     if (result && typeof result.error === 'object') {
                       return Promise.reject(result.error);
                     }
                   },
                   error => {
-                    console.log('error to save files', error);
+                    console.log(error);
                   });
             }}/>
           </span>

@@ -4,7 +4,7 @@ import {List, ListItem} from 'material-ui/List';
 import {spacing, typography} from 'material-ui/styles';
 import {cyan500} from 'material-ui/styles/colors';
 import config from '../../config';
-import {FileForm} from 'components';
+import {FileForm, NewFolder} from 'components';
 
 const styles = {
   logo: {
@@ -68,6 +68,7 @@ class AppNavDrawer extends Component {
           value={location.pathname}
         >
           <ListItem primaryText={<FileForm/>}/>
+          <ListItem primaryText={<NewFolder/>}/>
         </List>
       </Drawer>
     );

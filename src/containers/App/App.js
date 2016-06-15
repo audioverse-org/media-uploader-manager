@@ -19,8 +19,6 @@ import withWidth, {MEDIUM, LARGE} from 'material-ui/utils/withWidth';
 
 import {AppNavDrawer} from 'components';
 
-import {Toolbar} from 'material-ui/Toolbar';
-
 const muiTheme = getMuiTheme({
 
 }, {
@@ -183,7 +181,6 @@ class App extends Component {
           />
           <div style={prepareStyles(stylesMaterial.root)}>
             <div style={prepareStyles(stylesMaterial.content)}>
-              <Toolbar/>
               {React.cloneElement(children, {
                 onChangeMuiTheme: this.handleChangeMuiTheme,
               })}

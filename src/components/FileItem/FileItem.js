@@ -1,10 +1,21 @@
 import React, { Component, PropTypes } from 'react';
-import { load as loadDir } from 'redux/modules/file';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as fileActions from 'redux/modules/file';
+
+@connect(
+  state => ({
+    pathString: state.file.pathString
+  }),
+  dispatch => bindActionCreators(fileActions, dispatch)
+)
 
 export default class FileItem extends Component {
 
   static propTypes = {
-    file: PropTypes.object.isRequired
+    file: PropTypes.object.isRequired,
+    pathString: PropTypes.string.isRequired,
+    load: PropTypes.func.isRequired
   };
 
   getFileType = (file) => {
@@ -36,18 +47,22 @@ export default class FileItem extends Component {
     }
   }
 
-  handleDblClick = (file) => {
-    if ( file.type === 'folder' ) {
-      loadDir( file.name );
-      console.log('hi');
-    }
-  }
-
   render() {
-    const {file} = this.props;
+    const {file, pathString, load} = this.props;
     return (
       <div className="col-sm-3 text-center">
-        <p style={{'fontSize': '36px'}} onDoubleClick={() => this.handleDblClick(file)}><i className={'fa fa-' + this.getIcon( file )}/></p>
+        <p style={{'fontSize': '36px'}} onDoubleClick={() => {
+          if ( file.type === 'folder' ) {
+            load(pathString + '/' + file.name)
+              .then(
+                result => {
+                  console.log(result);
+                },
+                error => {
+                  console.log(error);
+                });
+          }
+        }}><i className={'fa fa-' + this.getIcon( file )}/></p>
         <p>{file.name}</p>
       </div>
     );
