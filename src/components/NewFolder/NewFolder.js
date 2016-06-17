@@ -53,7 +53,7 @@ class NewFolder extends Component {
         primary
         keyboardFocused
         onTouchTap={() => {
-          newFolder(pathString + '/' + folder)
+          newFolder(pathString, folder)
             .then(
               result => {
                 console.log(result);

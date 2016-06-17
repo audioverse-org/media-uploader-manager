@@ -7,12 +7,14 @@ const UPLOAD_FAIL = 'redux-example/file/UPLOAD_FAIL';
 const NEW_FOLDER = 'redux-example/file/NEW_FOLDER';
 const NEW_FOLDER_SUCCESS = 'redux-example/file/NEW_FOLDER_SUCCESS';
 const NEW_FOLDER_FAIL = 'redux-example/file/NEW_FOLDER_FAIL';
+const DELETE_FILE = 'redux-example/file/DELETE_FILE';
+const DELETE_FILE_SUCCESS = 'redux-example/file/DELETE_FILE_SUCCESS';
+const DELETE_FILE_FAIL = 'redux-example/file/DELETE_FILE_FAIL';
 
 const initialState = {
   loaded: false,
   files: [],
   dir: [],
-  pathArray: [],
   pathString: ''
 };
 
@@ -36,11 +38,7 @@ export default function reducer(state = initialState, action = {}) {
         loading: false,
         loaded: true,
         dir: action.result,
-        pathArray: [
-          ...state.pathArray,
-          action.path
-        ],
-        pathString: action.path !== '' ? state.pathString + '/' + action.path : state.pathString,
+        pathString: action.path,
         error: null
       };
     case LOAD_FAIL:
@@ -95,6 +93,20 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         error: action.error
       };
+    case DELETE_FILE:
+      return state;
+    case DELETE_FILE_SUCCESS:
+      return {
+        ...state,
+        dir: state.dir.filter((file) => {
+          return file.id !== action.id;
+        })
+      };
+    case DELETE_FILE_FAIL:
+      return {
+        ...state,
+        error: action.error
+      };
     default:
       return state;
   }
@@ -134,12 +146,32 @@ export function upload(files) {
   };
 }
 
-export function newFolder(folder) {
+export function newFolder(pathString, folder) {
   return {
     types: [NEW_FOLDER, NEW_FOLDER_SUCCESS, NEW_FOLDER_FAIL],
-    folder: [{type: 'folder', name: folder }],
+    folder: [{type: 'folder', name: folder}],
     promise: (client) => client.post('file/newFolder', {
-      data: {folder: folder}
+      data: {folder: pathString + '/' + folder}
+    })
+  };
+}
+
+export function deleteFile(pathString, file) {
+  return {
+    types: [DELETE_FILE, DELETE_FILE_SUCCESS, DELETE_FILE_FAIL],
+    id: file.id,
+    promise: (client) => client.del('file/deleteFile', {
+      data: {file: pathString + '/' + file.name}
+    })
+  };
+}
+
+export function renameFile(pathString, file, newName) {
+  return {
+    types: [DELETE_FILE, DELETE_FILE_SUCCESS, DELETE_FILE_FAIL],
+    id: file.id,
+    promise: (client) => client.del('file/deleteFile', {
+      data: {file: pathString + '/' + file.name, newName: newName}
     })
   };
 }
