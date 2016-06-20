@@ -63,6 +63,48 @@ export default class FileItem extends Component {
     }
   }
 
+  handleDoubleClick = () => {
+    if ( this.props.file.type === 'folder' ) {
+      this.props.load(this.props.pathString + '/' + this.props.file.name)
+        .then(
+          result => {
+            console.log(result);
+          },
+          error => {
+            console.log(error);
+          });
+    }
+  };
+
+  handleDeleteFile = () => {
+    this.props.deleteFile(this.props.pathString, this.props.file)
+      .then(
+        result => {
+          console.log(result);
+          if (result && typeof result.error === 'object') {
+            return Promise.reject(result.error);
+          }
+        },
+        error => {
+          console.log(error);
+        });
+  };
+
+  handleRenameFile = () => {
+    this.props.renameFile(this.props.pathString, this.props.file, this.state.newName)
+      .then(
+        result => {
+          console.log(result);
+          if (result && typeof result.error === 'object') {
+            return Promise.reject(result.error);
+          }
+          this.handleCloseRename();
+        },
+        error => {
+          console.log(error);
+        });
+  };
+
   handleOpenRename = () => {
     this.setState({openRename: true});
   };
@@ -86,7 +128,7 @@ export default class FileItem extends Component {
   };
 
   render() {
-    const {file, pathString, load, renameFile, deleteFile} = this.props;
+    const {file} = this.props;
     const {openRename, openDelete, newName} = this.state;
     const styles = {
       item: {
@@ -123,20 +165,7 @@ export default class FileItem extends Component {
         label="Confirm"
         primary
         keyboardFocused
-        onTouchTap={() => {
-          renameFile(pathString, file, newName)
-            .then(
-              result => {
-                console.log(result);
-                if (result && typeof result.error === 'object') {
-                  return Promise.reject(result.error);
-                }
-                this.handleCloseRename();
-              },
-              error => {
-                console.log(error);
-              });
-        }}
+        onTouchTap={this.handleRenameFile}
       />,
     ];
     const actionsDelete = [
@@ -149,36 +178,12 @@ export default class FileItem extends Component {
         label="Confirm"
         primary
         keyboardFocused
-        onTouchTap={() => {
-          deleteFile(pathString, file)
-            .then(
-              result => {
-                console.log(result);
-                if (result && typeof result.error === 'object') {
-                  return Promise.reject(result.error);
-                }
-                this.handleCloseDelete();
-              },
-              error => {
-                console.log(error);
-              });
-        }}
+        onTouchTap={this.handleDeleteFile}
       />,
     ];
     return (
       <div className="col-sm-3">
-        <Paper style={styles.item} zDepth={1} onDoubleClick={() => {
-          if ( file.type === 'folder' ) {
-            load(pathString + '/' + file.name)
-              .then(
-                result => {
-                  console.log(result);
-                },
-                error => {
-                  console.log(error);
-                });
-          }
-        }}>
+        <Paper style={styles.item} zDepth={1} onDoubleClick={this.handleDoubleClick}>
           <span style={styles.icon}>
             <i className={'fa fa-' + this.getIcon( file )}/>
           </span>
@@ -198,7 +203,7 @@ export default class FileItem extends Component {
           actions={actionsRename}
           modal={false}
           open={openRename}
-          onRequestClose={this.handleClose}
+          onRequestClose={this.handleCloseRename}
           contentStyle={{width: '350px'}}
         >
           <TextField

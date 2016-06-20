@@ -4,7 +4,10 @@ import {bindActionCreators} from 'redux';
 import { reduxForm } from 'redux-form';
 import * as fileActions from 'redux/modules/file';
 
-@connect(() => ({}),
+@connect(
+  state => ({
+    pathString: state.file.pathString
+  }),
   dispatch => bindActionCreators(fileActions, dispatch)
 )
 @reduxForm({
@@ -16,32 +19,34 @@ class FileForm extends Component {
   static propTypes = {
     fields: PropTypes.object.isRequired,
     handleSubmit: PropTypes.func.isRequired,
-    upload: PropTypes.func.isRequired
+    upload: PropTypes.func.isRequired,
+    pathString: PropTypes.string.isRequired
   };
 
+  handleUpload = (event) => {
+    if (!event.target.files.length) return;
+    this.props.upload(this.props.pathString, event.target.files)
+      .then(
+        result => {
+          console.log(result);
+          if (result && typeof result.error === 'object') {
+            return Promise.reject(result.error);
+          }
+        },
+        error => {
+          console.log(error);
+        });
+  }
+
   render() {
-    const { fields: { files }, handleSubmit, upload } = this.props;
+    const { fields: { files }, handleSubmit } = this.props;
     return (
       <form onSubmit={handleSubmit}>
         <div className="fileinput fileinput-new input-group" data-provides="fileinput">
           <span className="btn-file">
             <span className="fileinput-new">Upload</span>
             <span className="fileinput-exists">Change</span>
-            <input type="file" multiple {...files} value={null} onChange={event => {
-              console.log('event', event.target.files);
-              if (!event.target.files.length) return;
-              upload(event.target.files)
-                .then(
-                  result => {
-                    console.log(result);
-                    if (result && typeof result.error === 'object') {
-                      return Promise.reject(result.error);
-                    }
-                  },
-                  error => {
-                    console.log(error);
-                  });
-            }}/>
+            <input type="file" multiple {...files} value={''} onChange={this.handleUpload}/>
           </span>
           <span className="fileinput-filename"></span>
           <a href="#" className="close fileinput-exists" data-dismiss="fileinput" style={{float: 'none'}}>&times;</a>

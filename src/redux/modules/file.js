@@ -10,6 +10,9 @@ const NEW_FOLDER_FAIL = 'redux-example/file/NEW_FOLDER_FAIL';
 const DELETE_FILE = 'redux-example/file/DELETE_FILE';
 const DELETE_FILE_SUCCESS = 'redux-example/file/DELETE_FILE_SUCCESS';
 const DELETE_FILE_FAIL = 'redux-example/file/DELETE_FILE_FAIL';
+const RENAME_FILE = 'redux-example/file/RENAME_FILE';
+const RENAME_FILE_SUCCESS = 'redux-example/file/RENAME_FILE_SUCCESS';
+const RENAME_FILE_FAIL = 'redux-example/file/RENAME_FILE_FAIL';
 
 const initialState = {
   loaded: false,
@@ -107,6 +110,20 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         error: action.error
       };
+    case RENAME_FILE:
+      return state;
+    case RENAME_FILE_SUCCESS:
+      return {
+        ...state,
+        dir: state.dir.map((file) => {
+          return file.id === action.id ? Object.assign({}, file, {id: new Date().getTime() + '_' + action.newName, name: action.newName}) : file;
+        })
+      };
+    case RENAME_FILE_FAIL:
+      return {
+        ...state,
+        error: action.error
+      };
     default:
       return state;
   }
@@ -126,8 +143,9 @@ export function load(path) {
   };
 }
 
-export function upload(files) {
+export function upload(pathString, files) {
   const formData = new FormData();
+  formData.append('path', pathString);
   const arrayFiles = [];
 
   for (const key in files) {
@@ -168,10 +186,11 @@ export function deleteFile(pathString, file) {
 
 export function renameFile(pathString, file, newName) {
   return {
-    types: [DELETE_FILE, DELETE_FILE_SUCCESS, DELETE_FILE_FAIL],
+    types: [RENAME_FILE, RENAME_FILE_SUCCESS, RENAME_FILE_FAIL],
     id: file.id,
-    promise: (client) => client.del('file/deleteFile', {
-      data: {file: pathString + '/' + file.name, newName: newName}
+    newName: newName,
+    promise: (client) => client.post('file/renameFile', {
+      data: {file: pathString + '/' + file.name, newName: pathString + '/' + newName}
     })
   };
 }

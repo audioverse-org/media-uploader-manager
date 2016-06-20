@@ -30,7 +30,7 @@ class NewFolder extends Component {
   };
 
   handleClose = () => {
-    this.setState({open: false});
+    this.setState({open: false, folder: ''});
   };
 
   handleChangeFolder = (event) => {
@@ -39,8 +39,22 @@ class NewFolder extends Component {
     });
   };
 
+  handleNewFolder = () => {
+    this.props.newFolder(this.props.pathString, this.state.folder)
+      .then(
+        result => {
+          console.log(result);
+          this.handleClose();
+          if (result && typeof result.error === 'object') {
+            return Promise.reject(result.error);
+          }
+        },
+        error => {
+          alert(error.message);
+        });
+  };
+
   render() {
-    const { newFolder, pathString } = this.props;
     const { open, folder } = this.state;
     const actions = [
       <FlatButton
@@ -52,20 +66,7 @@ class NewFolder extends Component {
         label="Submit"
         primary
         keyboardFocused
-        onTouchTap={() => {
-          newFolder(pathString, folder)
-            .then(
-              result => {
-                console.log(result);
-                if (result && typeof result.error === 'object') {
-                  return Promise.reject(result.error);
-                }
-                this.handleClose();
-              },
-              error => {
-                console.log(error);
-              });
-        }}
+        onTouchTap={this.handleNewFolder}
       />,
     ];
 

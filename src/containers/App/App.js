@@ -1,11 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
-import { isLoaded as isInfoLoaded, load as loadInfo } from 'redux/modules/info';
-import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
-import { push } from 'react-router-redux';
+
 import config from '../../config';
-import { asyncConnect } from 'redux-connect';
 
 import {UploadPanel} from 'components';
 
@@ -25,35 +21,11 @@ const muiTheme = getMuiTheme({
   userAgent: false
 });
 
-@asyncConnect([{
-  promise: ({store: {dispatch, getState}}) => {
-    const promises = [];
-
-    if (!isInfoLoaded(getState())) {
-      promises.push(dispatch(loadInfo()));
-    }
-    if (!isAuthLoaded(getState())) {
-      promises.push(dispatch(loadAuth()));
-    }
-
-    return Promise.all(promises);
-  }
-}])
-@connect(
-  state => ({user: state.auth.user}),
-  {logout, pushState: push})
 class App extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
-    user: PropTypes.object,
-    logout: PropTypes.func.isRequired,
-    pushState: PropTypes.func.isRequired,
     location: PropTypes.object,
     width: PropTypes.number.isRequired
-  };
-
-  static contextTypes = {
-    store: PropTypes.object.isRequired
   };
 
   constructor(props) {
@@ -65,16 +37,6 @@ class App extends Component {
     this.setState({
       muiTheme: getMuiTheme(),
     });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.user && nextProps.user) {
-      // login
-      this.props.pushState('/loginSuccess');
-    } else if (this.props.user && !nextProps.user) {
-      // logout
-      this.props.pushState('/');
-    }
   }
 
   getStyles() {
@@ -136,11 +98,6 @@ class App extends Component {
   handleTouchTapLeftIconButton = () => this.setState({navDrawerOpen: !this.state.navDrawerOpen});
 
   handleChangeRequestNavDrawer = (open) => this.setState({navDrawerOpen: open});
-
-  handleLogout = (event) => {
-    event.preventDefault();
-    this.props.logout();
-  }
 
   render() {
     // const {user} = this.props;
