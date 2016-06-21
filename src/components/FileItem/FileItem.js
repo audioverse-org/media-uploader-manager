@@ -77,6 +77,7 @@ export default class FileItem extends Component {
   };
 
   handleDeleteFile = () => {
+    this.handleCloseDelete();
     this.props.deleteFile(this.props.pathString, this.props.file)
       .then(
         result => {
