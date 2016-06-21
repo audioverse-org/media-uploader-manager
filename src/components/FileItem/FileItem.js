@@ -71,7 +71,7 @@ export default class FileItem extends Component {
             console.log(result);
           },
           error => {
-            console.log(error);
+            alert(error.message);
           });
     }
   };
@@ -86,7 +86,7 @@ export default class FileItem extends Component {
           }
         },
         error => {
-          console.log(error);
+          alert(error.message);
         });
   };
 
@@ -101,7 +101,7 @@ export default class FileItem extends Component {
           this.handleCloseRename();
         },
         error => {
-          console.log(error);
+          alert(error.message);
         });
   };
 

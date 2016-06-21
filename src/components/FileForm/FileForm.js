@@ -34,22 +34,20 @@ class FileForm extends Component {
           }
         },
         error => {
-          console.log(error);
+          alert(error.message);
         });
   }
 
   render() {
     const { fields: { files }, handleSubmit } = this.props;
+    const styles = require('./FileForm.scss');
     return (
       <form onSubmit={handleSubmit}>
-        <div className="fileinput fileinput-new input-group" data-provides="fileinput">
-          <span className="btn-file">
-            <span className="fileinput-new">Upload</span>
-            <span className="fileinput-exists">Change</span>
+        <div>
+          <span className={styles.btnFile}>
+            <span>Upload</span>
             <input type="file" multiple {...files} value={''} onChange={this.handleUpload}/>
           </span>
-          <span className="fileinput-filename"></span>
-          <a href="#" className="close fileinput-exists" data-dismiss="fileinput" style={{float: 'none'}}>&times;</a>
         </div>
       </form>
     );
