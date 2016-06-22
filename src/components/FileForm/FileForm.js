@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import { reduxForm } from 'redux-form';
 import * as fileActions from 'redux/modules/file';
 
 @connect(
@@ -10,15 +9,10 @@ import * as fileActions from 'redux/modules/file';
   }),
   dispatch => bindActionCreators(fileActions, dispatch)
 )
-@reduxForm({
-  form: 'FileForm',
-  fields: [ 'files' ]
-})
+
 export default
 class FileForm extends Component {
   static propTypes = {
-    fields: PropTypes.object.isRequired,
-    handleSubmit: PropTypes.func.isRequired,
     upload: PropTypes.func.isRequired,
     pathString: PropTypes.string.isRequired
   };
@@ -39,16 +33,13 @@ class FileForm extends Component {
   }
 
   render() {
-    const { fields: { files }, handleSubmit } = this.props;
     const styles = require('./FileForm.scss');
     return (
-      <form onSubmit={handleSubmit}>
-        <div>
-          <span className={styles.btnFile}>
-            <span>Upload</span>
-            <input type="file" multiple {...files} value={''} onChange={this.handleUpload}/>
-          </span>
-        </div>
+      <form>
+        <span className={styles.btnFile}>
+          <span>Upload</span>
+          <input type="file" multiple value={''} onChange={this.handleUpload}/>
+        </span>
       </form>
     );
   }

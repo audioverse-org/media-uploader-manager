@@ -7,6 +7,7 @@ import {UploadPanel} from 'components';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import {red100, red500, red700} from 'material-ui/styles/colors';
 
 import AppBar from 'material-ui/AppBar';
 import spacing from 'material-ui/styles/spacing';
@@ -16,7 +17,11 @@ import withWidth, {MEDIUM, LARGE} from 'material-ui/utils/withWidth';
 import {AppNavDrawer} from 'components';
 
 const muiTheme = getMuiTheme({
-
+  palette: {
+    primary1Color: red500,
+    primary2Color: red700,
+    primary3Color: red100
+  },
 }, {
   userAgent: false
 });

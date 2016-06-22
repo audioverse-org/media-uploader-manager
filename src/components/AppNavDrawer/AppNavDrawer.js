@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import Drawer from 'material-ui/Drawer';
 import {List, ListItem} from 'material-ui/List';
 import {spacing, typography} from 'material-ui/styles';
-import {cyan500} from 'material-ui/styles/colors';
+import {red500} from 'material-ui/styles/colors';
 import config from '../../config';
 import {FileForm, NewFolder} from 'components';
 
@@ -13,7 +13,7 @@ const styles = {
     color: typography.textFullWhite,
     lineHeight: `${spacing.desktopKeylineIncrement}px`,
     fontWeight: typography.fontWeightLight,
-    backgroundColor: cyan500,
+    backgroundColor: red500,
     paddingLeft: spacing.desktopGutter,
     marginBottom: 8,
   },
