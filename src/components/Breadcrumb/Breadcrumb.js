@@ -20,7 +20,7 @@ export default class Breadcrumb extends Component {
     const { pathString, load } = this.props;
     const pathArray = pathString.split('/');
     return (
-      <ol className="breadcrumb">
+      <ol className="breadcrumb" style={{position: 'absolute', top: '-49px', width: '100%'}}>
         {
           pathArray.map((dir, key) => {
             return (

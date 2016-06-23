@@ -2,3 +2,9 @@
  * Override Bootstrap styles that you can't modify via variables here.
  *
  */
+
+body {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+}

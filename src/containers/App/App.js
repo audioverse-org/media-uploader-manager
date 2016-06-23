@@ -54,10 +54,15 @@ class App extends Component {
       },
       root: {
         paddingTop: spacing.desktopKeylineIncrement,
-        minHeight: 400,
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0
       },
       content: {
         margin: spacing.desktopGutter,
+        height: '100%'
       },
       contentWhenMedium: {
         margin: `${spacing.desktopGutter * 2}px ${spacing.desktopGutter * 3}px`,
@@ -143,9 +148,11 @@ class App extends Component {
           />
           <div style={prepareStyles(stylesMaterial.root)}>
             <div style={prepareStyles(stylesMaterial.content)}>
-              {React.cloneElement(children, {
-                onChangeMuiTheme: this.handleChangeMuiTheme,
-              })}
+              <div style={{position: 'relative', height: '100%'}}>
+                {React.cloneElement(children, {
+                  onChangeMuiTheme: this.handleChangeMuiTheme,
+                })}
+              </div>
             </div>
           </div>
           <AppNavDrawer

@@ -17,10 +17,12 @@ export default class Home extends Component {
 
   render() {
     return (
-      <div>
-        <Helmet title="Home"/>
-        <Breadcrumbs/>
-        <FileList/>
+      <div style={{position: 'absolute', top: '49px', left: 0, right: 0, bottom: '48px'}}>
+        <div style={{height: '100%', overflowX: 'hidden', overflowY: 'scroll'}}>
+          <Helmet title="Home"/>
+          <Breadcrumbs/>
+          <FileList/>
+        </div>
       </div>
     );
   }

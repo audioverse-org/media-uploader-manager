@@ -37,7 +37,7 @@ export default class FileItem extends Component {
   getFileType = (file) => {
     let type = null;
     const extensions = {
-      'image': ['.png', '.jpg', '.jpeg', '.gif', '.bmp'],
+      'image': ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.svg'],
       'audio': ['.mp3', '.ogg', '.wma']
     };
     if ( file.type === 'folder' ) return 'folder';
@@ -55,7 +55,7 @@ export default class FileItem extends Component {
       case 'folder':
         return 'folder-open';
       case 'image':
-        return 'picture';
+        return 'image';
       case 'audio':
         return 'music';
       default:
