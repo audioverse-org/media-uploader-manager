@@ -33,5 +33,9 @@ module.exports = Object.assign({
       ]
     }
   },
+  uploads: {
+    dir: 'uploads',
+    maxBytes: 4000000000
+  },
 
 }, environment);
