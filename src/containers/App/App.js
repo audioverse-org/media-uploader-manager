@@ -148,11 +148,9 @@ class App extends Component {
           />
           <div style={prepareStyles(stylesMaterial.root)}>
             <div style={prepareStyles(stylesMaterial.content)}>
-              <div style={{position: 'relative', height: '100%'}}>
-                {React.cloneElement(children, {
-                  onChangeMuiTheme: this.handleChangeMuiTheme,
-                })}
-              </div>
+              {React.cloneElement(children, {
+                onChangeMuiTheme: this.handleChangeMuiTheme,
+              })}
             </div>
           </div>
           <AppNavDrawer

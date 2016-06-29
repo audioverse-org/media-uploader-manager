@@ -13,12 +13,15 @@ const DELETE_FILE_FAIL = 'media-uploader-manager/file/DELETE_FILE_FAIL';
 const RENAME_FILE = 'media-uploader-manager/file/RENAME_FILE';
 const RENAME_FILE_SUCCESS = 'media-uploader-manager/file/RENAME_FILE_SUCCESS';
 const RENAME_FILE_FAIL = 'media-uploader-manager/file/RENAME_FILE_FAIL';
+const TOGGLE_VIEW = 'media-uploader-manager/file/TOGGLE_VIEW';
+const ORDER_BY = 'media-uploader-manager/file/ORDER_BY';
 
 const initialState = {
   loaded: false,
   files: [],
   dir: [],
-  pathString: ''
+  pathString: '',
+  view: 'list'
 };
 
 function existId( arr, id ) {
@@ -26,6 +29,20 @@ function existId( arr, id ) {
     if (value.id === id) return true;
   }
   return false;
+}
+
+function sort(array, field) {
+  return array.sort((elA, elB) => {
+    const nameA = isNaN(elA[field]) ? elA[field].toUpperCase() : elA[field];
+    const nameB = isNaN(elB[field]) ? elB[field].toUpperCase() : elB[field];
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+    return 0;
+  });
 }
 
 export default function reducer(state = initialState, action = {}) {
@@ -124,6 +141,19 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         error: action.error
       };
+    case TOGGLE_VIEW:
+      return {
+        ...state,
+        view: state.view === 'module' ? 'list' : 'module'
+      };
+    case ORDER_BY:
+      const mapped = state.dir.map((el) => {
+        return el;
+      });
+      return {
+        ...state,
+        dir: sort(mapped, action.field)
+      };
     default:
       return state;
   }
@@ -151,7 +181,7 @@ export function upload(pathString, files) {
   for (const key in files) {
     if (files.hasOwnProperty(key) && files[key] instanceof File) { // is the item a File?
       formData.append('files', files[key]);
-      arrayFiles.push( { id: new Date().getTime() + '_' + files[key].name, name: files[key].name } );
+      arrayFiles.push({id: new Date().getTime() + '_' + files[key].name, name: files[key].name});
     }
   }
 
@@ -167,7 +197,7 @@ export function upload(pathString, files) {
 export function newFolder(pathString, folder) {
   return {
     types: [NEW_FOLDER, NEW_FOLDER_SUCCESS, NEW_FOLDER_FAIL],
-    folder: [{type: 'folder', name: folder}],
+    folder: [{id: new Date().getTime() + '_' + folder, type: 'folder', name: folder, mtime: new Date()}],
     promise: (client) => client.post('file/newFolder', {
       data: {folder: pathString + '/' + folder}
     })
@@ -192,5 +222,18 @@ export function renameFile(pathString, file, newName) {
     promise: (client) => client.post('file/renameFile', {
       data: {file: pathString + '/' + file.name, newName: pathString + '/' + newName}
     })
+  };
+}
+
+export function toggleView() {
+  return {
+    type: TOGGLE_VIEW
+  };
+}
+
+export function orderBy(field) {
+  return {
+    type: ORDER_BY,
+    field: field
   };
 }

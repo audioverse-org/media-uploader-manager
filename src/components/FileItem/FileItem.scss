@@ -1,0 +1,54 @@
+.table {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+}
+.tableHeaderGroup {
+  display: table-header-group;
+  position: absolute;
+  top: -49px;
+  padding-right: 16px;
+  z-index: 1
+}
+.tableRowGroup {
+  display: table-row-group;
+  width: 100%
+}
+.tableRow {
+  display: table-row;
+}
+.cell {
+  display: table-cell;
+  width: 100%;
+  text-align: left;
+  vertical-align: middle;
+  height: 48px;
+  border-bottom: 1px solid #eee
+}
+
+.item {
+  height: 60px;
+  width: 100%;
+  margin: 10px 0;
+  display: flex;
+  line-height: 60px;
+  justify-content: space-between
+}
+.icon {
+  font-size: 24px;
+  display: inline-block;
+  background: #eee;
+  padding: 0 10px;
+  margin-right: 10px;
+}
+.lineHeight {
+  line-height: 47px
+}
+.text {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap
+}
+.iconMenu {
+  display: flex
+}

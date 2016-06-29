@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as fileActions from 'redux/modules/file';
-import Paper from 'material-ui/Paper';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton/IconButton';
@@ -10,10 +9,16 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
+import FolderIcon from 'material-ui/svg-icons/file/folder';
+import ImageIcon from 'material-ui/svg-icons/image/image';
+import MusicNoteIcon from 'material-ui/svg-icons/image/music-note';
+import InsertDriveFileIcon from 'material-ui/svg-icons/editor/insert-drive-file';
+import Paper from 'material-ui/Paper';
 
 @connect(
   state => ({
-    pathString: state.file.pathString
+    pathString: state.file.pathString,
+    view: state.file.view
   }),
   dispatch => bindActionCreators(fileActions, dispatch)
 )
@@ -23,6 +28,7 @@ export default class FileItem extends Component {
   static propTypes = {
     file: PropTypes.object.isRequired,
     pathString: PropTypes.string.isRequired,
+    view: PropTypes.string.isRequired,
     load: PropTypes.func.isRequired,
     renameFile: PropTypes.func.isRequired,
     deleteFile: PropTypes.func.isRequired
@@ -53,14 +59,30 @@ export default class FileItem extends Component {
   getIcon = (file) => {
     switch ( this.getFileType(file) ) {
       case 'folder':
-        return 'folder-open';
+        return <FolderIcon/>;
       case 'image':
-        return 'image';
+        return <ImageIcon/>;
       case 'audio':
-        return 'music';
+        return <MusicNoteIcon/>;
       default:
-        return 'file';
+        return <InsertDriveFileIcon/>;
     }
+  }
+
+  convertSize = (size) => {
+    const base = 1024;
+    if ( size < 999 ) return (size).toFixed(2) + ' b';
+    else if ( size < 999999 ) return (size / base).toFixed(2) + ' KB';
+    else if ( size < 999999999 ) return (size / (base * base)).toFixed(2) + ' MB';
+    else if ( size < 999999999999 ) return (size / (base * base * base)).toFixed(2) + ' GB';
+  }
+
+  formatDate = (strDate) => {
+    const date = new Date(strDate);
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    return months[date.getMonth()] + ' ' + date.getDate() + ' ' + date.getFullYear();
   }
 
   handleDoubleClick = () => {
@@ -106,7 +128,7 @@ export default class FileItem extends Component {
         });
   };
 
-  handleOpenRename = () => {
+  handleTouchPadOpenRename = () => {
     this.setState({openRename: true});
   };
 
@@ -114,7 +136,7 @@ export default class FileItem extends Component {
     this.setState({openRename: false});
   };
 
-  handleOpenDelete = () => {
+  handleTouchPadOpenDelete = () => {
     this.setState({openDelete: true});
   };
 
@@ -129,33 +151,9 @@ export default class FileItem extends Component {
   };
 
   render() {
-    const {file} = this.props;
+    const {file, view} = this.props;
     const {openRename, openDelete, newName} = this.state;
-    const styles = {
-      item: {
-        height: '60px',
-        width: '100%',
-        margin: '10px 0',
-        display: 'flex',
-        lineHeight: '60px',
-        justifyContent: 'space-between'
-      },
-      icon: {
-        fontSize: '24px',
-        display: 'inline-block',
-        background: '#eee',
-        padding: '0 10px',
-        marginRight: '10px'
-      },
-      text: {
-        textOverflow: 'ellipsis',
-        overflow: 'hidden',
-        whiteSpace: 'nowrap'
-      },
-      iconMenu: {
-        display: 'flex'
-      }
-    };
+    const styles = require('./FileItem.scss');
     const actionsRename = [
       <FlatButton
         label="Cancel"
@@ -182,23 +180,50 @@ export default class FileItem extends Component {
         onTouchTap={this.handleDeleteFile}
       />,
     ];
+    const options = (<IconMenu
+      iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+      anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+      targetOrigin={{horizontal: 'right', vertical: 'top'}}
+      className={styles.iconMenu}
+    >
+      <MenuItem primaryText="Rename" onTouchTap={this.handleTouchPadOpenRename}/>
+      <MenuItem primaryText="Delete" onTouchTap={this.handleTouchPadOpenDelete}/>
+    </IconMenu>);
     return (
-      <div className="col-sm-3">
-        <Paper style={styles.item} zDepth={1} onDoubleClick={this.handleDoubleClick}>
-          <span style={styles.icon}>
-            <i className={'fa fa-' + this.getIcon( file )}/>
+      <div className={view === 'list' ? styles.tableRow : 'col-sm-3'} onDoubleClick={this.handleDoubleClick}>
+        {view === 'list' ?
+        <div>
+          <div className={styles.cell}>
+            <div style={{width: '100%'}}>
+              <span className={styles.icon + ' ' + styles.lineHeight}>
+                {this.getIcon( file )}
+              </span>
+              <span className={styles.text}>{file.name}</span>
+            </div>
+          </div>
+          <div className={styles.cell}>
+            <div style={{width: '100px'}}>
+              {this.formatDate(file.mtime)}
+            </div>
+          </div>
+          <div className={styles.cell}>
+            <div style={{width: '100px'}}>
+              {this.convertSize(file.size)}
+            </div>
+          </div>
+          <div className={styles.cell}>
+            <div style={{width: '48px'}}>
+              {options}
+            </div>
+          </div>
+        </div> :
+        <Paper className={styles.item} zDepth={1} onDoubleClick={this.handleDoubleClick}>
+          <span className={styles.icon}>
+            {this.getIcon( file )}
           </span>
-          <span style={styles.text}>{file.name}</span>
-          <IconMenu
-            iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-            anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-            targetOrigin={{horizontal: 'right', vertical: 'top'}}
-            style={styles.iconMenu}
-          >
-            <MenuItem primaryText="Rename" onTouchTap={this.handleOpenRename}/>
-            <MenuItem primaryText="Delete" onTouchTap={this.handleOpenDelete}/>
-          </IconMenu>
-        </Paper>
+          <span className={styles.text}>{file.name}</span>
+          {options}
+        </Paper>}
         <Dialog
           title="Rename"
           actions={actionsRename}
