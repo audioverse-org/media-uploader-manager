@@ -24,7 +24,7 @@ module.exports = Object.assign({
         {name: 'description', content: ''},
         {charset: 'utf-8'},
         {property: 'og:site_name', content: 'Media Uploader Manager'},
-        {property: 'og:image', content: 'https://react-redux.herokuapp.com/logo.jpg'},
+        {property: 'og:image', content: 'http://admin.audioverse.net:8080/logo.jpg'},
         {property: 'og:locale', content: 'en_US'},
         {property: 'og:title', content: 'Media Uploader Manager'},
         {property: 'og:description', content: ''},
