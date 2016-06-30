@@ -38,7 +38,7 @@ export default class Home extends Component {
   };
 
   componentDidMount = () => {
-    fetch('https://admin.audioverse.net/ajax/islogged', {
+    fetch('http://admin.audioverse.net/ajax/islogged', {
       method: 'GET',
     })
     .then(res => res.json())
