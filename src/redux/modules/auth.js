@@ -20,7 +20,6 @@ export default function reducer(state = initialState, action = {}) {
         loading: true
       };
     case LOAD_SUCCESS:
-      console.log('action.result', action.result);
       return {
         ...state,
         loading: false,
