@@ -37,6 +37,15 @@ export default class Home extends Component {
     orderBy: PropTypes.func.isRequired
   };
 
+  componentDidMount = () => {
+    fetch('https://admin.audioverse.net/ajax/islogged', {
+      method: 'GET',
+    })
+    .then(res => res.json())
+    .then(res => console.log(res))
+    .catch(err => console.error(err));
+  }
+
   handleTouchTapToggleView = () => this.props.toggleView();
 
   handleTouchTapOrderBy = (field) => this.props.orderBy(field);

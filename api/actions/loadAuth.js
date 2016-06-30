@@ -8,6 +8,7 @@ export default function loadAuth(req) {
         if (err)
           reject(err);
         
+        console.log('res.text', res.text)
         resolve(res.text && res.text !== 'null' ? res.text : null);
       });
   });
