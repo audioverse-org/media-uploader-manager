@@ -40,10 +40,16 @@ export default class Home extends Component {
   componentDidMount = () => {
     fetch('https://admin.audioverse.net/ajax/islogged', {
       method: 'GET',
+      credentials: 'include'
     })
     .then(res => res.json())
-    .then(res => console.log(res))
-    .catch(err => console.error(err));
+    .then(res => {
+      console.log(res);
+      if (!res) {
+        location.href = 'https://admin.audioverse.net/';
+      }
+    })
+    .catch(() => location.href = 'https://admin.audioverse.net/');
   }
 
   handleTouchTapToggleView = () => this.props.toggleView();
