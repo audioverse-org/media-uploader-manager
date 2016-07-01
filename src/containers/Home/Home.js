@@ -44,7 +44,6 @@ export default class Home extends Component {
     })
     .then(res => res.json())
     .then(res => {
-      console.log(res);
       if (!res) {
         location.href = 'https://admin.audioverse.net/';
       }
