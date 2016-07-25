@@ -58,9 +58,9 @@ export default class Home extends Component {
       return file.selected;
     });
 
-    let htmlSelectedElements = "";
+    let htmlSelectedElements = '';
     selected.map((file) => {
-      htmlSelectedElements += "<strong>" + file.name + "</strong><br/>";
+      htmlSelectedElements += '<strong>' + file.name + '</strong><br/>';
     });
     console.log('selected', selected, 'htmlSelectedElements', htmlSelectedElements);
     window.opener.document.getElementById('filesToAddFilesList').value = htmlSelectedElements;
