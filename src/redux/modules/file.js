@@ -15,6 +15,7 @@ const RENAME_FILE_SUCCESS = 'media-uploader-manager/file/RENAME_FILE_SUCCESS';
 const RENAME_FILE_FAIL = 'media-uploader-manager/file/RENAME_FILE_FAIL';
 const TOGGLE_VIEW = 'media-uploader-manager/file/TOGGLE_VIEW';
 const ORDER_BY = 'media-uploader-manager/file/ORDER_BY';
+const TOGGLE_SELECT = 'media-uploader-manager/file/TOGGLE_SELECT';
 
 const initialState = {
   loaded: false,
@@ -154,6 +155,13 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         dir: sort(mapped, action.field)
       };
+    case TOGGLE_SELECT:
+      return {
+        ...state,
+        dir: state.dir.map((file) => {
+          return file.id === action.id ? Object.assign({}, file, {selected: !file.selected}) : file;
+        })
+      };
     default:
       return state;
   }
@@ -235,5 +243,12 @@ export function orderBy(field) {
   return {
     type: ORDER_BY,
     field: field
+  };
+}
+
+export function toggleSelect(id) {
+  return {
+    type: TOGGLE_SELECT,
+    id: id
   };
 }

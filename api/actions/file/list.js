@@ -7,8 +7,8 @@ export default function list(req) {
     var pathToRead = req.query.path ? config.uploads.dir + req.query.path : config.uploads.dir;
 		fs.readdir(pathToRead, (err, data) => {
       if (err)
-        reject(err);
-      
+        return reject(err);
+
       resolve(
         data.map(function (file) {
           var stat = fs.statSync( path.join(pathToRead, file) );

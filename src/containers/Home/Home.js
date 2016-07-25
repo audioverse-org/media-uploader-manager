@@ -9,6 +9,7 @@ import { FileList, Breadcrumbs } from 'components';
 import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar';
 import ViewModuleIcon from 'material-ui/svg-icons/action/view-module';
 import ViewListIcon from 'material-ui/svg-icons/action/view-list';
+import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
@@ -25,31 +26,46 @@ import SortByAlphaIcon from 'material-ui/svg-icons/av/sort-by-alpha';
 
 @connect(
   state => ({
-    view: state.file.view
+    view: state.file.view,
+    dir: state.file.dir
   }),
   dispatch => bindActionCreators(fileActions, dispatch)
 )
 
 export default class Home extends Component {
   static propTypes = {
-    toggleView: PropTypes.func.isRequired,
     view: PropTypes.string.isRequired,
+    dir: PropTypes.array.isRequired,
+    toggleView: PropTypes.func.isRequired,
     orderBy: PropTypes.func.isRequired
   };
 
   componentDidMount = () => {
-    fetch('https://admin.audioverse.net/ajax/islogged', {
-      method: 'GET',
-      credentials: 'include'
-    })
-    .then(res => res.json())
-    .then(res => {
-      if (!res) {
-        location.href = 'https://admin.audioverse.net/';
-      }
-    })
-    .catch(() => location.href = 'https://admin.audioverse.net/');
+    // fetch('https://admin.audioverse.net/ajax/islogged', {
+    //   method: 'GET',
+    //   credentials: 'include'
+    // })
+    // .then(res => res.json())
+    // .then(res => {
+    //   if (!res) {
+    //     location.href = 'https://admin.audioverse.net/';
+    //   }
+    // })
+    // .catch(() => location.href = 'https://admin.audioverse.net/');
   }
+  handleTouchTapDone = () => {
+    const selected = this.props.dir.filter((file) => {
+      return file.selected;
+    });
+
+    let htmlSelectedElements = "";
+    selected.map((file) => {
+      htmlSelectedElements += "<strong>" + file.name + "</strong><br/>";
+    });
+    console.log('selected', selected, 'htmlSelectedElements', htmlSelectedElements);
+    window.opener.document.getElementById('filesToAddFilesList').value = htmlSelectedElements;
+    window.close();
+  };
 
   handleTouchTapToggleView = () => this.props.toggleView();
 
@@ -65,6 +81,7 @@ export default class Home extends Component {
             <Breadcrumbs/>
           </ToolbarGroup>
           <ToolbarGroup>
+            <RaisedButton label="Done" primary onTouchTap={this.handleTouchTapDone}/>
             <IconButton style={{height: '100%'}} onTouchTap={this.handleTouchTapToggleView}>
               {view === 'list' ? <ViewModuleIcon/> : <ViewListIcon/>}
             </IconButton>

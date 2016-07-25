@@ -31,7 +31,8 @@ export default class FileItem extends Component {
     view: PropTypes.string.isRequired,
     load: PropTypes.func.isRequired,
     renameFile: PropTypes.func.isRequired,
-    deleteFile: PropTypes.func.isRequired
+    deleteFile: PropTypes.func.isRequired,
+    toggleSelect: PropTypes.func.isRequired
   };
 
   state = {
@@ -69,12 +70,13 @@ export default class FileItem extends Component {
     }
   }
 
-  convertSize = (size) => {
+  convertSize = (file) => {
+    if ( file.type === 'folder' ) return '';
     const base = 1024;
-    if ( size < 999 ) return (size).toFixed(2) + ' b';
-    else if ( size < 999999 ) return (size / base).toFixed(2) + ' KB';
-    else if ( size < 999999999 ) return (size / (base * base)).toFixed(2) + ' MB';
-    else if ( size < 999999999999 ) return (size / (base * base * base)).toFixed(2) + ' GB';
+    if ( file.size < 999 ) return (file.size).toFixed(2) + ' b';
+    else if ( file.size < 999999 ) return (file.size / base).toFixed(2) + ' KB';
+    else if ( file.size < 999999999 ) return (file.size / (base * base)).toFixed(2) + ' MB';
+    else if ( file.size < 999999999999 ) return (file.size / (base * base * base)).toFixed(2) + ' GB';
   }
 
   formatDate = (strDate) => {
@@ -84,6 +86,12 @@ export default class FileItem extends Component {
 
     return months[date.getMonth()] + ' ' + date.getDate() + ' ' + date.getFullYear();
   }
+
+  handleClick = () => {
+    if ( this.props.file.type !== 'folder' ) {
+      this.props.toggleSelect( this.props.file.id );
+    }
+  };
 
   handleDoubleClick = () => {
     if ( this.props.file.type === 'folder' ) {
@@ -190,7 +198,7 @@ export default class FileItem extends Component {
       <MenuItem primaryText="Delete" onTouchTap={this.handleTouchPadOpenDelete}/>
     </IconMenu>);
     return (
-      <div className={view === 'list' ? styles.tableRow : 'col-sm-3'} onDoubleClick={this.handleDoubleClick}>
+      <div className={[view === 'list' ? styles.tableRow : 'col-sm-3', file.selected ? styles.selected : ''].join(' ')} onClick={this.handleClick} onDoubleClick={this.handleDoubleClick}>
         {view === 'list' ?
         <div>
           <div className={styles.cell}>
@@ -208,7 +216,7 @@ export default class FileItem extends Component {
           </div>
           <div className={styles.cell}>
             <div style={{width: '100px'}}>
-              {this.convertSize(file.size)}
+              {this.convertSize(file)}
             </div>
           </div>
           <div className={styles.cell}>
