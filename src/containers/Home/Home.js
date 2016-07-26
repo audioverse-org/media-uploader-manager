@@ -62,8 +62,7 @@ export default class Home extends Component {
     selected.map((file) => {
       htmlSelectedElements += '<strong>' + file.name + '</strong><br/>';
     });
-    console.log('selected', selected, 'htmlSelectedElements', htmlSelectedElements);
-    window.opener.document.getElementById('filesToAddFilesList').value = htmlSelectedElements;
+    window.opener.postMessage(htmlSelectedElements, '*');
     window.close();
   };
 
