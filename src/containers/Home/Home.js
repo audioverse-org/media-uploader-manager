@@ -27,7 +27,8 @@ import SortByAlphaIcon from 'material-ui/svg-icons/av/sort-by-alpha';
 @connect(
   state => ({
     view: state.file.view,
-    dir: state.file.dir
+    dir: state.file.dir,
+    pathString: state.file.pathString
   }),
   dispatch => bindActionCreators(fileActions, dispatch)
 )
@@ -37,7 +38,8 @@ export default class Home extends Component {
     view: PropTypes.string.isRequired,
     dir: PropTypes.array.isRequired,
     toggleView: PropTypes.func.isRequired,
-    orderBy: PropTypes.func.isRequired
+    orderBy: PropTypes.func.isRequired,
+    pathString: PropTypes.string.isRequired
   };
 
   componentDidMount = () => {
@@ -59,8 +61,9 @@ export default class Home extends Component {
     });
 
     let htmlSelectedElements = '';
+    const path = this.props.pathString !== '' ? this.props.pathString.substr(1, this.props.pathString.length) + '/' : '';
     selected.map((file) => {
-      htmlSelectedElements += '<strong>' + file.name + '</strong><br/>';
+      htmlSelectedElements += '<strong>' + path + file.name + '</strong><br/>';
     });
     window.opener.postMessage(htmlSelectedElements, '*');
     window.close();
