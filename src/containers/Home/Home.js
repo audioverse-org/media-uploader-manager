@@ -43,17 +43,17 @@ export default class Home extends Component {
   };
 
   componentDidMount = () => {
-    // fetch('https://admin.audioverse.net/ajax/islogged', {
-    //   method: 'GET',
-    //   credentials: 'include'
-    // })
-    // .then(res => res.json())
-    // .then(res => {
-    //   if (!res) {
-    //     location.href = 'https://admin.audioverse.net/';
-    //   }
-    // })
-    // .catch(() => location.href = 'https://admin.audioverse.net/');
+    fetch('https://admin.audioverse.net/ajax/islogged', {
+      method: 'GET',
+      credentials: 'include'
+    })
+    .then(res => res.json())
+    .then(res => {
+      if (!res) {
+        location.href = 'https://admin.audioverse.net/';
+      }
+    })
+    .catch(() => location.href = 'https://admin.audioverse.net/');
   }
   handleTouchTapDone = () => {
     const selected = this.props.dir.filter((file) => {
