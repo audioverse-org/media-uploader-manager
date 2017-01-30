@@ -15,6 +15,9 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import SortByAlphaIcon from 'material-ui/svg-icons/av/sort-by-alpha';
 
+// Safari doesn't have fetch API yet so we are using
+import 'whatwg-fetch';
+
 @asyncConnect([{
   deferred: true,
   promise: ({store: {dispatch, getState}}) => {
@@ -43,32 +46,17 @@ export default class Home extends Component {
   };
 
   componentDidMount = () => {
-    // fetch('https://admin.audioverse.net/ajax/islogged', {
-    //   method: 'GET',
-    //   credentials: 'include'
-    // })
-    // .then(res => res.json())
-    // .then(res => {
-    //   if (!res) {
-    //     location.href = 'https://admin.audioverse.net/';
-    //   }
-    // })
-    // .catch(() => location.href = 'https://admin.audioverse.net/');
-
-    // Safari doesn't have fetch API yet so we are using
-    function reqListener() {
-      console.log('-->', this.responseText);
-      if (this.responseText == 'null') {
+    fetch('https://admin.audioverse.net/ajax/islogged', {
+      method: 'GET',
+      credentials: 'include'
+    })
+    .then(res => res.json())
+    .then(res => {
+      if (!res) {
         location.href = 'https://admin.audioverse.net/';
       }
-    }
-
-    const oReq = new XMLHttpRequest();
-    oReq.addEventListener('load', reqListener);
-    oReq.addEventListener('error', ()=> {location.href = 'https://admin.audioverse.net/';});
-    oReq.addEventListener('abort', ()=> {location.href = 'https://admin.audioverse.net/';});
-    oReq.open('GET', 'https://admin.audioverse.net/ajax/islogged');
-    oReq.send();
+    })
+    .catch(() => location.href = 'https://admin.audioverse.net/');
   }
   handleTouchTapDone = () => {
     const selected = this.props.dir.filter((file) => {
