@@ -43,17 +43,31 @@ export default class Home extends Component {
   };
 
   componentDidMount = () => {
-    fetch('https://admin.audioverse.net/ajax/islogged', {
-      method: 'GET',
-      credentials: 'include'
-    })
-    .then(res => res.json())
-    .then(res => {
-      if (!res) {
+    // fetch('https://admin.audioverse.net/ajax/islogged', {
+    //   method: 'GET',
+    //   credentials: 'include'
+    // })
+    // .then(res => res.json())
+    // .then(res => {
+    //   if (!res) {
+    //     location.href = 'https://admin.audioverse.net/';
+    //   }
+    // })
+    // .catch(() => location.href = 'https://admin.audioverse.net/');
+
+    const reqListener = () => {
+      console.log(this.responseText);
+      if (!this.responseText) {
         location.href = 'https://admin.audioverse.net/';
       }
-    })
-    .catch(() => location.href = 'https://admin.audioverse.net/');
+    };
+
+    const oReq = new XMLHttpRequest();
+    oReq.addEventListener('load', reqListener);
+    oReq.addEventListener('error', ()=> {location.href = 'https://admin.audioverse.net/';});
+    oReq.addEventListener('abort', ()=> {location.href = 'https://admin.audioverse.net/';});
+    oReq.open('GET', 'https://admin.audioverse.net/ajax/islogged');
+    oReq.send();
   }
   handleTouchTapDone = () => {
     const selected = this.props.dir.filter((file) => {
