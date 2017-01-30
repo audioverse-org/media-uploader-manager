@@ -55,11 +55,12 @@ export default class Home extends Component {
     // })
     // .catch(() => location.href = 'https://admin.audioverse.net/');
 
+    // Safari doesn't have fetch API yet so we are using
     const reqListener = () => {
-      console.log(this.responseText);
-      if (!this.responseText) {
-        location.href = 'https://admin.audioverse.net/';
-      }
+      console.log('--------->>><<<<', this.responseText);
+      // if (!this.responseText) {
+        // location.href = 'https://admin.audioverse.net/';
+      // }
     };
 
     const oReq = new XMLHttpRequest();
