@@ -57,7 +57,8 @@ export default class Home extends Component {
 
     // Safari doesn't have fetch API yet so we are using
     function reqListener() {
-      if (!this.responseText) {
+      console.log('-->', this.responseText);
+      if (this.responseText == 'null') {
         location.href = 'https://admin.audioverse.net/';
       }
     }
