@@ -35,7 +35,7 @@ module.exports = Object.assign({
   },
   uploads: {
     dir: '../uploads/media-staging',
-    maxBytes: 10000000000
+    maxBytes: 20000000000
   },
 
 }, environment);
